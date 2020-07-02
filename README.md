@@ -1,9 +1,10 @@
 # mysql-
 
--#-关系型数据库
-	----如何使用终端操作数据库
-	1、如何登陆数据库服务器 ：在dos系统下输入：mysql -uroot -proot
-	2、如何查询数据库服务器中所有的数据库
+# 关系型数据库
+```shell
+使用终端操作数据库
+如何登陆数据库服务器 ：在dos系统下输入：mysql -uroot -proot
+如何查询数据库服务器中所有的数据库
 mysql> show databases;
 +--------------------+
 | Database           |
@@ -17,6 +18,8 @@ mysql> show databases;
 | test               |
 +--------------------+
 7 rows in set (0.00 sec)
+```
+
 #-- 查看数据表结构
 -- describe pet;
 desc pet;
@@ -39,22 +42,25 @@ DROP TABLE myorder;
 一定记住:INSERT(增),DELETE(删),UPDATE(改),SELECT(查) 
 
 
-#mysql建表中的约束
-1.主键约束:primary key
-                 它能够唯一确定一张表中的一条记录,增加主键约束之后,就可以使得字段不重复而且不为空
-				create table user(
-						id int PRIMARY KEY,
-						name VARCHAR(20)
-				);
-2.联合主键约束:primary key(id,name)
-				只要联合主键值加起来不重复就可以，并且联合主键里面任何一个字段都不可以为空
-				说明了复合主键只要所有的字段都不是相同的情况下可以允许其中的字段重复:
-				CREATE TABLE user2(
-					id INT,
-					name VARCHAR(20),
-					password VARCHAR(20),
-					PRIMARY key(id,name)
-				);
+# mysql建表中的约束
+## 1.主键约束:primary key 
+```
+它能够唯一确定一张表中的一条记录,增加主键约束之后,就可以使得字段不重复而且不为空
+create table user(
+	id int PRIMARY KEY,
+	name VARCHAR(20)
+);
+```
+## 2.联合主键约束:primary key(id,name)
+````
+只要联合主键值加起来不重复就可以，并且联合主键里面任何一个字段都不可以为空
+说明了复合主键只要所有的字段都不是相同的情况下可以允许其中的字段重复:
+CREATE TABLE user2(
+	id INT,
+	name VARCHAR(20),
+	password VARCHAR(20),
+	PRIMARY key(id,name)
+);
 运行DESCRIBE user2;
 +----------+-------------+------+-----+---------+-------+
 | Field    | Type        | Null | Key | Default | Extra |
@@ -87,12 +93,14 @@ SELECT * FROM user2;
 				
 **场景:表中有班级号以及学生座位号,我们可以用班级号+学生的座位号可以准确的定位一个学生,
   如:(1班5号可以准确的确定一个学生)
-					
-3.自增约束:auto_increment
-				CREATE TABLE user3(
-					id INT PRIMARY KEY AUTO_INCREMENT,
-					name VARCHAR(20)
-				);
+````
+
+## 3.自增约束:auto_increment
+````
+CREATE TABLE user3(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(20)
+);
 运行DESCRIBE user3;
 +-------+-------------+------+-----+---------+----------------+
 | Field | Type        | Null | Key | Default | Extra          |
@@ -124,9 +132,10 @@ ALTER TABLE user MODIFY id INT PRIMARY KEY;
 
 -- 删除主键
 ALTER TABLE user drop PRIMARY KEY;
+````
 
-
-4.唯一约束
+## 4.唯一约束
+````
 约束修饰的字段的值不可以重复
 (1) 创建时未添加唯一约束 可用语句ALTER TABLE user5 ADD UNIQUE(需要约束的字段);				
 CREATE TABLE user5(
@@ -205,8 +214,10 @@ CREATE TABLE user_test(
 			2、 可以使用 alter。。。add。。。
 			3、 alter。。。modify。。。
 			4、 删除约束 alter。。。drop。。。
+````
 
-5.非空约束:
+## 5.非空约束:
+````
 -- 建表时添加非空约束
 -- 约束某个字段不能为空
 CREATE TABLE user (
@@ -216,8 +227,9 @@ CREATE TABLE user (
 
 -- 移除非空约束
 ALTER TABLE user MODIFY name VARCHAR(20);
-
-6.默认约束
+````
+## 6.默认约束
+````
 就是当我们插入字段值的时候，如果没有传值，就会使用默认值
 -- 建表时添加默认约束
 -- 约束某个字段的默认值
@@ -229,8 +241,9 @@ CREATE TABLE user2 (
 
 -- 移除非空约束
 ALTER TABLE user MODIFY age INT;
-
-7.外键约束  foreign key(class_id) reference classes(id)
+````
+## 7.外键约束  foreign key(class_id) reference classes(id)
+````
 涉及两个表： 父表，子表
 -- 班级
 CREATE TABLE classes (
@@ -263,9 +276,11 @@ INSERT INTO students VALUES (1003,'小孙',3);
 INSERT INTO students VALUES (1004,'小李',4);
 
 DELETE classes WHERE name = '四班'; //不可删除，因为副表中已使用
+````
 
-#数据库的三大设计范式
-1.第一范式
+# 数据库的三大设计范式
+##1.第一范式
+````
 只要字段值还可以继续拆分，就不满足第一范式。
 范式设计得越详细，对某些实际操作可能会更好，但并非都有好处，需要对项目的实际情况进行设定。
 
@@ -293,8 +308,9 @@ DELETE classes WHERE name = '四班'; //不可删除，因为副表中已使用
 	insert into student2 values(3,'王五','中国','四川省','成都市','武侯区武侯大道40号');
 	如此创建假如满足第一范式，那么后期统计国家或者省份的时候就比较方便
 范式设计的越详细，对于某些实际操作可能更好，但是不一定都是好处
-
-2.第二范式
+````
+## 2.第二范式
+````
 必须是满足第一范式的前提下，第二范式要求，除主键外的每一列都必须完全依赖于主键
 如果要出现不完全依赖，只可能发生在联合主键的情况下
 
@@ -330,8 +346,9 @@ CREATE TABLE customer (
 );
 拆分之后，myorder 表中的 product_id 和 customer_id 完全依赖于 order_id 主键，
 而 product 和 customer 表中的其他字段又完全依赖于主键。满足了第二范式的设计！
-
-3.第三范式
+````
+## 3.第三范式
+````
 在满足第二范式的前提下，除了主键列之外，其他列之间不能有传递依赖关系。
 CREATE TABLE myorder (
     order_id INT PRIMARY KEY,
@@ -354,23 +371,30 @@ CREATE TABLE customer (
     phone VARCHAR(15)
 );
 修改后就不存在其他列之间的传递依赖关系，其他列都只依赖于主键列，满足了第三范式的设计！
+````
 
-#mysql查询练习
-1.创建表
-学生表Student
+# mysql查询练习
+
+## 1.创建表
+### 学生表Student
+````
 学号
 姓名
 性别
 出生年月日
 所在班级
-		create table Student(
-			sno varchar(20) primary key,
-			sname varchar(20) not null,
-			ssex varchar(10) not null,
-			sbirthday datetime,
-			class varchar(20)
-		);
-课程表Course
+create table Student(
+	sno varchar(20) primary key,
+	sname varchar(20) not null,
+	ssex varchar(10) not null,
+	sbirthday datetime,
+	class varchar(20)
+);
+````
+
+
+### 课程表Course
+````
 课程号
 课程名称
 教师编号
@@ -380,8 +404,9 @@ CREATE TABLE customer (
 			tno varchar(20) not null,
 			foreign key(tno) references teacher(tno)
 		);
-
-成绩表Score
+````
+### 成绩表Score
+````
 学号
 课程号
 成绩
@@ -393,8 +418,9 @@ CREATE TABLE customer (
 			foreign key(cno) references course(cno),
 			primary key(sno,cno)
 		);
-
-教师表Teacher
+````
+### 教师表Teacher
+````
 教师编号
 教师名字
 教师性别
@@ -409,8 +435,10 @@ CREATE TABLE customer (
 			tprof varchar(20) not null,
 			depart varchar(20) not null
 		);
-2.往数据表中添加数据
-添加学生信息
+````
+## 2.往数据表中添加数据
+### 添加信息
+````
 -- 添加学生表数据
 INSERT INTO student VALUES('101', '曾华', '男', '1977-09-01', '95033');
 INSERT INTO student VALUES('102', '匡明', '男', '1975-10-02', '95031');
@@ -450,8 +478,8 @@ SELECT * FROM course;
 SELECT * FROM score;
 SELECT * FROM student;
 SELECT * FROM teacher;
-
-#十大查询练习
+````
+# 十大查询练习
 1.-- 查询 student 表的所有列
 SELECT * FROM student;
 
