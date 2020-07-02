@@ -838,7 +838,7 @@ AND degree > (SELECT degree FROM score WHERE sno = '109' AND cno = '3-105');
 ``
 
 ## 19.查询成绩高于学号为‘109’、课程号为‘3-105’的成绩的所有记录
-``
+````
 SELECT * FROM score 
 WHERE degree > (SELECT degree FROM score WHERE sno = '109' AND cno = '3-105');
 
@@ -853,27 +853,27 @@ WHERE degree > (SELECT degree FROM score WHERE sno = '109' AND cno = '3-105');
 | 109 | 6-166 |     81 |
 +-----+-------+--------+
 6 rows in set (0.00 sec)
-``
+````
 
 ## 20.查询和学号为108、101的同学同年出生的所有学生的sno、sname和sbirthday列
 ###-- YEAR(..): 取出日期中的年份
-``
+````
 SELECT sno, sname, sbirthday FROM student
 WHERE YEAR(sbirthday) IN (SELECT YEAR(sbirthday) FROM student WHERE sno IN (101, 108));
-``
+````
 
 ## 21.查询‘张旭’教师任课的学生成绩
-```
+````
 先在teacher表中拿到张旭老师的教师编号
 select tno from teacher where tname='张旭';
 拿到course表中教师编号对应的课程编号
 select cno from course where tno=(select tno from teacher where tname='张旭');
 在score表中拿到相应课程编号对应相关信息
 select*from score cno=(select cno from course where tno=(select tno from teacher where tname='张旭'));
-```
+````
 
 ## 22.查询某选修课程多于5个同学的教师姓名
-```
+````
 逐渐套娃，先把最小的子查询写好，然后放到范围较大的查询中以此类推
 select cno from score group by cno having count(*)>5;
 
@@ -886,18 +886,18 @@ select tno from course where cno=
 
 select tname from teacher where tno=
 		(select tno from course where cno=(select cno from score group by cno having count(*)>5));
-```
+````
 
 ## 23.查询95033班和95031班全体学生记录
-`
+````
 select*from student where class in ('95031','95033');
-`
+````
 ## 24.查询存在有85分以上成绩的cno
 `
 select*from score where degree>85;
-`
+````
 ## 25.查询 计算机系 教师所教课程的成绩表
-`
+````
 select*from teacher where depart='计算机系';
 
 tno	tname	tsex	tbirthday	tprof	depart
@@ -923,14 +923,14 @@ sno	cno	degree
 105	3-245	75
 109	3-105	76
 109	3-245	68
-`
+````
 
 # UNION 和 NOTIN 的使用
 
 ## 26.查询 计算机系 与 电子工程系 中的不同职称的教师。
 ### -- UNION 求并集
 ### -- NOT: 代表逻辑非
-``
+````
 --先查询计算机系中职称中与电子工程系中职称不同的教师
 SELECT * FROM teacher WHERE depart = '计算机系' AND tprof NOT IN (
     SELECT tprof FROM teacher WHERE depart = '电子工程系'
@@ -941,11 +941,11 @@ UNION
 SELECT * FROM teacher WHERE depart = '电子工程系' AND tprof NOT IN (
     SELECT tprof FROM teacher WHERE depart = '计算机系'
 );
-``
+````
 
 ## ANY 关键字表示至少一个 - DESC 关键字表示 降序 排列（mysql中默认升序排序）
 ## 27.查询课程 3-105 且成绩 至少 高于 3-245 的 score 表。
-```
+````
 SELECT * FROM score WHERE c_no = '3-105';
 +------+-------+--------+
 | s_no | c_no  | degree |
@@ -968,9 +968,9 @@ SELECT * FROM score WHERE c_no = '3-245';
 +------+-------+--------+
 
 至少？大于其中至少一个
-```
+````
 ### -- ANY: 符合SQL语句中的任意条件。
-```
+````
 -- 也就是说，在 3-105 成绩中，只要有一个大于从 3-245 筛选出来的任意行就符合条件，
 -- 最后根据降序查询结果。
 SELECT * FROM score WHERE cno = '3-105' AND degree > ANY(
@@ -986,10 +986,10 @@ SELECT * FROM score WHERE cno = '3-105' AND degree > ANY(
 | 105  | 3-105 |     88 |
 | 109  | 3-105 |     76 |
 +------+-------+--------+
-```
+````
 ### 表示所有的 ALL
 ## 28.查询课程 3-105 且成绩高于 3-245 的 score 表。
-```
+````
 -- 只需对上一道题稍作修改。
 -- ALL: 符合SQL语句中的所有条件。
 -- 也就是说，在 3-105 每一行成绩中，都要大于从 3-245 筛选出来全部行才算符合条件。
@@ -1005,11 +1005,11 @@ SELECT * FROM score WHERE cno = '3-105' AND degree > ALL(
 | 104  | 3-105 |     89 |
 | 105  | 3-105 |     88 |
 +------+-------+--------+
-```
+````
 
 
 ## 29.查询所有教师和同学的name、sex和birthday
-``
+````
 select tname as name,tsex as sex,tbirthday as birthday from teacher
 union
 select sname,ssex,sbirthday from student;
@@ -1019,9 +1019,9 @@ select tname as name,tsex as sex,tbirthday as birthday from teacher where tsex='
 union
 select sname,ssex,sbirthday from student where ssex='女';
 
-``
+````
 ## 30.查询成绩比该课程平均成绩低的同学的 score 表。
-``
+````
 -- 查询平均分
 SELECT cno, AVG(degree) FROM score GROUP BY cno;
 +-------+-------------+
@@ -1067,10 +1067,10 @@ SELECT * FROM score a WHERE degree < (
 | 109  | 3-245 |     68 |
 | 109  | 6-166 |     81 |
 +------+-------+--------+
-``
+````
 
 ## 31.查询所有任课 ( 在 course 表里有课程 ) 教师的 name 和 department 。
-``
+````
 SELECT name, department FROM teacher WHERE no IN (SELECT tno FROM course);
 +--------+-----------------+
 | name   | department      |
@@ -1080,11 +1080,11 @@ SELECT name, department FROM teacher WHERE no IN (SELECT tno FROM course);
 | 刘冰   | 电子工程系      |
 | 张旭   | 电子工程系      |
 +--------+-----------------+
-``
+````
 
 ## 条件加组筛选
 ## 32.查询 student 表中至少有 2 名男生的 class
-``
+````
 -- 查看学生表信息
 SELECT * FROM student;
 +-----+-----------+-----+------------+-------+
@@ -1110,13 +1110,13 @@ SELECT class FROM student WHERE ssex = '男' GROUP BY class HAVING COUNT(*) > 1;
 | 95033 |
 | 95031 |
 +-------+
-``
+````
 ## NOTLIKE 模糊查询取反
 ## 33.查询 student 表中不姓 "王" 的同学记录。
 
 ## -- NOT: 取反
 ## -- LIKE: 模糊查询
-``
+````
 mysql> SELECT * FROM student WHERE sname NOT LIKE '王%';
 +-----+-----------+-----+------------+-------+
 | no  | name      | sex | birthday   | class |
@@ -1129,12 +1129,12 @@ mysql> SELECT * FROM student WHERE sname NOT LIKE '王%';
 | 109 | 赵铁柱    | 男  | 1974-06-03 | 95031 |
 | 110 | 张飞      | 男  | 1974-06-03 | 95038 |
 +-----+-----------+-----+------------+-------+
-``
+````
 
 ## YEAR 与 NOW 函数
 ## 34.查询 student 表中每个学生的姓名和年龄。
 
-```
+````
 SELECT YEAR(NOW());
 
 year(now())
@@ -1156,22 +1156,22 @@ SELECT name, YEAR(NOW()) - YEAR(sbirthday) as age FROM student;
 | 赵铁柱    |   45 |
 | 张飞      |   45 |
 +-----------+------+
-```
+````
 
 ## MAX 与 MIN 函数
 ## 35.查询 student 表中最大和最小的 birthday 值。
-```
+````
 SELECT MAX(sbirthday), MIN(sbirthday) FROM student;
 +---------------+---------------+
 | MAX(birthday) | MIN(birthday) |
 +---------------+---------------+
 | 1977-09-01    | 1974-06-03    |
 +---------------+---------------+
-```
+````
 
 ## 多段排序
 ## 以 class 和 birthday 从大到小的顺序查询 student 表。
-``
+````
 SELECT * FROM student ORDER BY class DESC, sbirthday;
 +-----+-----------+-----+------------+-------+
 | no  | name      | sex | birthday   | class |
@@ -1187,10 +1187,10 @@ SELECT * FROM student ORDER BY class DESC, sbirthday;
 | 108 | 张全蛋    | 男  | 1975-02-10 | 95031 |
 | 102 | 匡明      | 男  | 1975-10-02 | 95031 |
 +-----+-----------+-----+------------+-------+
-``
+````
 
 ## 查询 "男" 教师及其所上的课程。
-```
+````
 SELECT * FROM course WHERE tno in (SELECT tno FROM teacher WHERE sex = '男');
 +-------+--------------+------+
 | no    | name         | t_no |
@@ -1207,11 +1207,11 @@ cno	cname	tno	tname	tsex
 3-245	操作系统	804	李诚	男
 6-166	数字电路	856	张旭	男
 
-```
+````
 
 ## MAX 函数与子查询
 ## 36.查询最高分同学的 score 表。
-```
+````
 -- 找出最高成绩（该查询只能有一个结果）
 SELECT MAX(degree) FROM score;
 
@@ -1226,7 +1226,7 @@ SELECT * FROM score WHERE degree = (SELECT MAX(degree) FROM score);
 ```
 
 ## 37.查询和 "李军" 同性别的所有同学 name 。
-```
+````
 -- 首先将李军的性别作为条件取出来
 SELECT sex FROM student WHERE name = '李军';
 +-----+
@@ -1234,8 +1234,8 @@ SELECT sex FROM student WHERE name = '李军';
 +-----+
 | 男  |
 +-----+
-```
-```
+````
+````
 -- 根据性别查询 name 和 sex
 SELECT name, sex FROM student WHERE ssex = (
     SELECT sex FROM student WHERE name = '李军'
@@ -1252,10 +1252,10 @@ SELECT name, sex FROM student WHERE ssex = (
 | 赵铁柱    | 男  |
 | 张飞      | 男  |
 +-----------+-----+
-```
+````
 
 ## 37.查询和 "李军" 同性别且同班的同学 name 。
-```
+````
 SELECT name, sex, class FROM student WHERE sex = (
     SELECT sex FROM student WHERE name = '李军'
 ) AND class = (
@@ -1268,7 +1268,7 @@ SELECT name, sex, class FROM student WHERE sex = (
 | 李军      | 男  | 95033 |
 | 王尼玛    | 男  | 95033 |
 +-----------+-----+-------+
-```
+````
 
 ## 38.查询所有选修 "计算机导论" 课程的 "男" 同学成绩表。
 ````
@@ -1290,7 +1290,7 @@ SELECT * FROM score WHERE cno = (
 ```` 
 
 # 按等级查询
-``
+````
 建立一个 grade 表代表学生的成绩等级，并插入数据：
 
 CREATE TABLE grade (
@@ -1315,11 +1315,11 @@ SELECT * FROM grade;
 |   60 |   69 | D     |
 |    0 |   59 | E     |
 +------+------+-------+
-``
+````
 ## 39.查询所有学生的 s_no 、c_no 和 grade 列。
 
 ### 思路是，使用区间 ( BETWEEN ) 查询，判断学生的成绩 ( degree ) 在 grade 表的 low 和 upp 之间。
-```
+````
 SELECT sno, cno, grade FROM score, grade 
 WHERE degree BETWEEN low AND upp;
 +------+-------+-------+
@@ -1338,22 +1338,22 @@ WHERE degree BETWEEN low AND upp;
 | 109  | 3-245 | D     |
 | 109  | 6-166 | B     |
 +------+-------+-------+
-```
+````
 
 # sql的四种连接查询
 ## 内连接
-`
+````
 inner join 或者 join
-`
+````
 ## 外连接
-`
+````
 	左连接 left join 或者 left outer join
 	右连接 right join 或者 right outer join
 	完全外连接 full join 或者 full outer join
 	`
 	
 ## 准备用于测试连接查询的数据：
-`
+````
 CREATE DATABASE testJoin;
 
 CREATE TABLE person (
@@ -1373,15 +1373,15 @@ INSERT INTO person VALUES (1, '张三', 1), (2, '李四', 3), (3, '王五', 6);
 分析两张表发现，person 表并没有为 cardId 字段设置一个在 card 表中对应的 id 外键。
 	如果设置了的话，person 中 cardId 字段值为 6 的行就插不进去，
 	因为该 cardId 值在 card 表中并没有。
-`	
+````	
 ## 内连接
-`
+````
 要查询这两张表中有关系的数据，可以使用 INNER JOIN ( 内连接 ) 将它们连接在一起。
 内联查询，其实就是通过两张表中的数据，通过某个字段相等，查询出相关记录
-`
+````
 ### -- INNER JOIN: 表示为内连接，将两张表拼接在一起。
 ### -- on: 表示要执行某个条件。
-```
+````
 SELECT * FROM person INNER JOIN card on person.cardId = card.id;
 +------+--------+--------+------+-----------+
 | id   | name   | cardId | id   | name      |
@@ -1393,11 +1393,11 @@ SELECT * FROM person INNER JOIN card on person.cardId = card.id;
 -- 将 INNER 关键字省略掉，结果也是一样的。
 -- SELECT * FROM person JOIN card on person.cardId = card.id;
 注意：card 的整张表被连接到了右边。
-```
+````
 
 ## 左外连接
 ### 完整显示左边的表 ( person ) ，右边的表如果符合条件就显示，不符合则补 NULL 。
-``
+````
 -- LEFT JOIN 也叫做 LEFT OUTER JOIN，用这两种方式的查询结果是一样的。
 SELECT * FROM person LEFT JOIN card on person.cardId = card.id;
 +------+--------+--------+------+-----------+
@@ -1407,10 +1407,10 @@ SELECT * FROM person LEFT JOIN card on person.cardId = card.id;
 |    2 | 李四   |      3 |    3 | 农行卡    |
 |    3 | 王五   |      6 | NULL | NULL      |
 +------+--------+--------+------+-----------+
-``
+````
 ## 右外链接
 ### 完整显示右边的表 ( card ) ，左边的表如果符合条件就显示，不符合则补 NULL 。
-``
+````
 SELECT * FROM person RIGHT JOIN card on person.cardId = card.id;
 +------+--------+--------+------+-----------+
 | id   | name   | cardId | id   | name      |
@@ -1421,11 +1421,11 @@ SELECT * FROM person RIGHT JOIN card on person.cardId = card.id;
 | NULL | NULL   |   NULL |    4 | 工商卡    |
 | NULL | NULL   |   NULL |    5 | 邮政卡    |
 +------+--------+--------+------+-----------+
-``
+````
 
 ## 全外链接
 ### 完整显示两张表的全部数据。
-``
+````
 -- MySQL 不支持这种语法的全外连接
 -- SELECT * FROM person FULL JOIN card on person.cardId = card.id;
 -- 出现错误：
@@ -1445,11 +1445,11 @@ SELECT * FROM person RIGHT JOIN card on person.cardId = card.id;
 | NULL | NULL   |   NULL |    4 | 工商卡    |
 | NULL | NULL   |   NULL |    5 | 邮政卡    |
 +------+--------+--------+------+-----------+
-``
+````
 
 # mysql事务
 ## 事务其实是最小的不可分割的工作单元，能够保证业务的完整性
-``
+````
 比如我们的银行转账：
 -- a -> -100
 UPDATE user set money = money - 100 WHERE name = 'a';
@@ -1457,10 +1457,10 @@ UPDATE user set money = money - 100 WHERE name = 'a';
 UPDATE user set money = money + 100 WHERE name = 'b';
 在实际项目中，假设只有一条 SQL 语句执行成功，而另外一条执行失败了，就会出现数据前后不一致。
 因此，实际开发当中在执行多条有关联 SQL 语句时，事务可能会要求这些 SQL 语句要么同时执行成功，要么就都执行失败。
-``
+````
 
 ## 如何控制事务 - COMMIT / ROLLBACK
-```
+````
 在 MySQL 中，事务的自动提交状态默认是开启的。
 -- 查询事务的自动提交状态
 SELECT @@AUTOCOMMIT;
@@ -1470,10 +1470,10 @@ SELECT @@AUTOCOMMIT;
 |            1 |
 +--------------+
 自动提交的作用：当我们执行一条 SQL 语句的时候，其产生的效果就会立即体现出来，且不能回滚。
-```
+````
 
 ### 什么是回滚？举个例子：
-```
+````
 CREATE DATABASE bank;
 USE bank;
 CREATE TABLE user (
@@ -1552,7 +1552,7 @@ SELECT * FROM user;
 +----+------+-------+
 ```
 #### 那如何将虚拟的数据真正提交到数据库中？使用 COMMIT :
-```
+````
 INSERT INTO user VALUES (2, 'b', 1000);
 -- 手动提交数据（持久性），
 -- 将数据真正提交到数据库中，执行后不能再回滚提交过的数据。
@@ -1569,9 +1569,9 @@ SELECT * FROM user;
 |  1 | a    |  1000 |
 |  2 | b    |  1000 |
 +----+------+-------+
-```
+````
 ## 总结
-``
+````
 事务就是 
 	自动提交 @@autocommit = 1
 	手动提交 commit
@@ -1584,8 +1584,8 @@ SELECT * FROM user;
 	@@AUTOCOMMIT = 0 时，使用 COMMIT 命令提交事务。
 	事务回滚
 	@@AUTOCOMMIT = 0 时，使用 ROLLBACK 命令回滚事务。
-``
-```
+````
+````
 如果这个时候转账：
 	UPDATE user set money = money - 100 WHERE name = 'a';
 	UPDATE user set money = money + 100 WHERE name = 'b';
@@ -1618,7 +1618,7 @@ SELECT * FROM user;
 +----+------+-------+
 这时我们又回到了发生意外之前的状态，也就是说，事务给我们提供了一个可以反悔的机会。
 	假设数据没有发生意外，这时可以手动将数据真正提交到数据表中：COMMIT 。
-```
+````
 
 # 手动开启事务 - BEGIN / START TRANSACTION
 ## 事务的默认提交被开启 ( @@AUTOCOMMIT = 1 ) 后，此时就不能使用事务回滚了。
@@ -1626,7 +1626,7 @@ SELECT * FROM user;
 
 ### -- 使用 BEGIN 或者 START TRANSACTION 手动开启一个事务
 ### -- START TRANSACTION;
-```
+````
 BEGIN;
 UPDATE user set money = money - 100 WHERE name = 'a';
 UPDATE user set money = money + 100 WHERE name = 'b';
@@ -1652,10 +1652,10 @@ SELECT * FROM user;
 |  2 | b    |  1000 |
 +----+------+-------+
 使用 COMMIT 提交数据后，提交后无法再发生本次事务的回滚，因为该事务已经结束了。
-```
+````
 
 ### BEGIN;
-```
+````
 UPDATE user set money = money - 100 WHERE name = 'a';
 UPDATE user set money = money + 100 WHERE name = 'b';
 
@@ -1672,45 +1672,45 @@ COMMIT;
 
 -- 测试回滚（无效，因为表的数据已经被提交）
 ROLLBACK;
-```
+````
 
 # 事务的 ACID 特征与使用
 ## 事务的四大特征：
-``
+````
 A 原子性：事务是最小的单位，不可以再分割；
 C 一致性：要求同一事务中的 SQL 语句，必须保证同时成功或者失败；
 I 隔离性：事务1 和 事务2 之间是具有隔离性的；
 D 持久性：事务一旦结束 ( COMMIT ) ，就不可以再返回了 ( ROLLBACK ) 。
-``
+````
 ### ● 原子性（Atomicity）：
-`
+````
 操作这些指令时，要么全部执行成功，要么全部不执行。只要其中一个指令执行失败，所有的指令都执行失败，数据进行回滚，回到执行指令前的数据状态。
 eg：拿转账来说，假设用户A和用户B两者的钱加起来一共是20000，那么不管A和B之间如何转账，转几次账，事务结束后两个用户的钱相加起来应该还得是20000，这就是事务的一致性。
-`
+````
 ### ● 一致性（Consistency）：
-`
+````
 事务的执行使数据从一个状态转换为另一个状态，但是对于整个数据的完整性保持稳定。
-`
+````
 ### ● 隔离性（Isolation）：
-`
+````
 隔离性是当多个用户并发访问数据库时，比如操作同一张表时，数据库为每一个用户开启的事务，不能被其他事务的操作所干扰，多个并发事务之间要相互隔离。即要达到这么一种效果：对于任意两个并发的事务T1和T2，在事务T1看来，T2要么在T1开始之前就已经结束，要么在T1结束之后才开始，这样每个事务都感觉不到有其他事务在并发地执行。
-`
+````
 ### ● 持久性（Durability）：
-`
+````
 当事务正确完成后，它对于数据的改变是永久性的。
 eg： 例如我们在使用JDBC操作数据库时，在提交事务方法后，提示用户事务操作完成，当我们程序执行完成直到看到提示后，就可以认定事务以及正确提交，即使这时候数据库出现了问题，也必须要将我们的事务完全执行完成，否则就会造成我们看到提示事务处理完毕，但是数据库因为故障而没有执行事务的重大错误。
-`
+````
 # 事务开启
-``
+````
 	1、修改默认提交 set autocommit=0；
 	2、begin；
 	3、start transaction；
 事务手动提交：commit
 事务手动回滚：rollback(在关闭了自动提交时可用)
-``
+````
 # 事务的隔离性
 ## 事务的隔离性可分为四种 ( 性能从低到高 ) ：
-``
+````
 1.READ UNCOMMITTED; ( 读取未提交 )
 	如果有多个事务，那么任意事务都可以看见其他事务的未提交数据。
 2.READ COMMITTED; ( 读取已提交 )
@@ -1719,9 +1719,9 @@ eg： 例如我们在使用JDBC操作数据库时，在提交事务方法后，�
 	如果有多个连接都开启了事务，那么事务之间不能共享数据记录，否则只能共享已提交的记录。
 4.SERIALIZABLE; ( 串行化 )
 	所有的事务都会按照固定顺序执行，执行完一个事务后再继续执行下一个事务的写入操作。
-``
+````
 ## 查看当前数据库的默认隔离级别：
-`
+````
 -- MySQL 8.x, GLOBAL 表示系统级别，不加表示会话级别。
 SELECT @@GLOBAL.TRANSACTION_ISOLATION;
 SELECT @@TRANSACTION_ISOLATION;
@@ -1734,9 +1734,9 @@ SELECT @@TRANSACTION_ISOLATION;
 -- MySQL 5.x
 SELECT @@GLOBAL.TX_ISOLATION;
 SELECT @@TX_ISOLATION;
-`
+````
 ## 修改隔离级别：
-`
+````
 -- 设置系统隔离级别，LEVEL 后面表示要设置的隔离级别 (READ UNCOMMITTED)。
 SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
 -- 查询系统隔离级别，发现已经被修改。
@@ -1746,11 +1746,11 @@ SELECT @@GLOBAL.TRANSACTION_ISOLATION;
 +--------------------------------+
 | READ-UNCOMMITTED               |
 +--------------------------------+
-`
+````
 
 
 ### 测试 READ UNCOMMITTED ( 读取未提交 ) 的隔离性：
-``
+````
 INSERT INTO user VALUES (3, '小明', 1000);
 INSERT INTO user VALUES (4, '淘宝店', 1000);
 
@@ -1799,11 +1799,11 @@ SELECT * FROM user;
 |  4 | 淘宝店    |  1000 |
 +----+-----------+-------+
 这就是所谓的脏读，一个事务读取到另外一个事务还未提交的数据。这在实际开发中是不允许出现的。
-``
+````
 
 ### 读取已提交
 ### 把隔离级别设置为 READ COMMITTED ：
-``
+````
 SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;
 SELECT @@GLOBAL.TRANSACTION_ISOLATION;
 +--------------------------------+
@@ -1881,16 +1881,16 @@ SELECT AVG(money) FROM user;
 +------------+
 |  820.0000  |
 +------------+
-''
-''
+````
+````
 虽然 READ COMMITTED 让我们只能读取到其他事务已经提交的数据，但还是会出现问题，
 		就是在读取同一个表的数据时，可能会发生前后不一致的情况。
 		这被称为不可重复读现象 ( READ COMMITTED ) 。
-``
+````
 
 ## 幻读
 ## 将隔离级别设置为 REPEATABLE READ ( 可被重复读取 ) :
-``
+````
 SET GLOBAL TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 SELECT @@GLOBAL.TRANSACTION_ISOLATION;
 +--------------------------------+
@@ -1935,11 +1935,11 @@ INSERT INTO user VALUES (6, 'd', 1000);
 -- ERROR 1062 (23000): Duplicate entry '6' for key 'PRIMARY'
 	报错了，操作被告知已存在主键为 6 的字段。
 	这种现象也被称为幻读，一个事务提交的数据，不能被其他事务读取到。
-``
+````
 
 ### 串行化
 ### 顾名思义，就是所有事务的写入操作全都是串行化的。什么意思？把隔离级别修改成 SERIALIZABLE :
-``
+````
 SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 SELECT @@GLOBAL.TRANSACTION_ISOLATION;
 +--------------------------------+
@@ -1977,7 +1977,7 @@ INSERT INTO user VALUES (7, '王小花', 1000);
 
 根据这个解释，小王在插入数据时，会出现等待状态，直到小张执行 COMMIT 结束它所处的事务，
 			或者出现等待超时。
-``	
+````	
 --如何使用可视化工具操作数据库
 	
 --如何在编程语言中操作数据库
