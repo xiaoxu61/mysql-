@@ -20,6 +20,9 @@ mysql> show databases;
 7 rows in set (0.00 sec)
 ```
 
+## 一定记住:INSERT(增),DELETE(删),UPDATE(改),SELECT(查) 
+
+````
 #-- 查看数据表结构
 -- describe pet;
 desc pet;
@@ -38,8 +41,8 @@ DELETE FROM pet where name = 'squirrel';
 
 #-- 删除表
 DROP TABLE myorder;
+````
 
-一定记住:INSERT(增),DELETE(删),UPDATE(改),SELECT(查) 
 
 
 # mysql建表中的约束
