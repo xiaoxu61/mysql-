@@ -137,7 +137,7 @@ ALTER TABLE user MODIFY id INT PRIMARY KEY;
 ALTER TABLE user drop PRIMARY KEY;
 ````
 
-## 4.唯一约束
+## 4.唯一约束 unique
 ````
 约束修饰的字段的值不可以重复
 (1) 创建时未添加唯一约束 可用语句ALTER TABLE user5 ADD UNIQUE(需要约束的字段);				
@@ -219,7 +219,7 @@ CREATE TABLE user_test(
 			4、 删除约束 alter。。。drop。。。
 ````
 
-## 5.非空约束:
+## 5.非空约束: not null
 ````
 -- 建表时添加非空约束
 -- 约束某个字段不能为空
@@ -231,7 +231,7 @@ CREATE TABLE user (
 -- 移除非空约束
 ALTER TABLE user MODIFY name VARCHAR(20);
 ````
-## 6.默认约束
+## 6.默认约束 defult
 ````
 就是当我们插入字段值的时候，如果没有传值，就会使用默认值
 -- 建表时添加默认约束
