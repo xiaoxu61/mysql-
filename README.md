@@ -821,7 +821,7 @@ select cno,avg(degree) from score where sno in(select sno from student where cla
 ````
 
 ## 18.查询选修‘3-105’课程的成绩高于‘109’号同学‘3-105’成绩的所有同学的记录
-``
+````
 查询在 3-105 课程中，所有成绩高于 109 号同学的记录。
 select degree from score where sno='109' and cno='3-105';
 首先筛选出课堂号为 3-105 ，在找出所有成绩高于 109 号同学的的行。
@@ -835,7 +835,7 @@ AND degree > (SELECT degree FROM score WHERE sno = '109' AND cno = '3-105');
 | 103 | 3-105 |     92 |
 | 105 | 3-105 |     88 |
 +-----+-------+--------+
-``
+````
 
 ## 19.查询成绩高于学号为‘109’、课程号为‘3-105’的成绩的所有记录
 ````
@@ -893,7 +893,7 @@ select tname from teacher where tno=
 select*from student where class in ('95031','95033');
 ````
 ## 24.查询存在有85分以上成绩的cno
-`
+````
 select*from score where degree>85;
 ````
 ## 25.查询 计算机系 教师所教课程的成绩表
@@ -1223,7 +1223,7 @@ SELECT * FROM score WHERE degree = (SELECT MAX(degree) FROM score);
 +------+-------+--------+
 | 103  | 3-105 |     92 |
 +------+-------+--------+
-```
+````
 
 ## 37.查询和 "李军" 同性别的所有同学 name 。
 ````
@@ -1319,6 +1319,7 @@ SELECT * FROM grade;
 ## 39.查询所有学生的 s_no 、c_no 和 grade 列。
 
 ### 思路是，使用区间 ( BETWEEN ) 查询，判断学生的成绩 ( degree ) 在 grade 表的 low 和 upp 之间。
+
 ````
 SELECT sno, cno, grade FROM score, grade 
 WHERE degree BETWEEN low AND upp;
@@ -1342,17 +1343,20 @@ WHERE degree BETWEEN low AND upp;
 
 # sql的四种连接查询
 ## 内连接
+
 ````
 inner join 或者 join
 ````
+
 ## 外连接
 ````
-	左连接 left join 或者 left outer join
-	右连接 right join 或者 right outer join
-	完全外连接 full join 或者 full outer join
-	`
+左连接 left join 或者 left outer join
+右连接 right join 或者 right outer join
+完全外连接 full join 或者 full outer join
+````
 	
 ## 准备用于测试连接查询的数据：
+
 ````
 CREATE DATABASE testJoin;
 
@@ -1362,19 +1366,18 @@ CREATE TABLE person (
     cardId INT
 );
 
-
 CREATE TABLE card (
     id INT,
     name VARCHAR(20)
 );
 INSERT INTO card VALUES (1, '饭卡'), (2, '建行卡'), (3, '农行卡'), (4, '工商卡'), (5, '邮政卡');
 INSERT INTO person VALUES (1, '张三', 1), (2, '李四', 3), (3, '王五', 6);
-
 分析两张表发现，person 表并没有为 cardId 字段设置一个在 card 表中对应的 id 外键。
-	如果设置了的话，person 中 cardId 字段值为 6 的行就插不进去，
-	因为该 cardId 值在 card 表中并没有。
-````	
+如果设置了的话，person 中 cardId 字段值为 6 的行就插不进去，
+因为该 cardId 值在 card 表中并没有。	
+````
 ## 内连接
+
 ````
 要查询这两张表中有关系的数据，可以使用 INNER JOIN ( 内连接 ) 将它们连接在一起。
 内联查询，其实就是通过两张表中的数据，通过某个字段相等，查询出相关记录
@@ -1550,7 +1553,7 @@ SELECT * FROM user;
 +----+------+-------+
 |  1 | a    |  1000 |
 +----+------+-------+
-```
+````
 #### 那如何将虚拟的数据真正提交到数据库中？使用 COMMIT :
 ````
 INSERT INTO user VALUES (2, 'b', 1000);
@@ -1585,6 +1588,7 @@ SELECT * FROM user;
 	事务回滚
 	@@AUTOCOMMIT = 0 时，使用 ROLLBACK 命令回滚事务。
 ````
+
 ````
 如果这个时候转账：
 	UPDATE user set money = money - 100 WHERE name = 'a';
@@ -1976,8 +1980,9 @@ INSERT INTO user VALUES (7, '王小花', 1000);
 		( 这意味着队列中同时只能执行一个事务的写入操作 ) 。
 
 根据这个解释，小王在插入数据时，会出现等待状态，直到小张执行 COMMIT 结束它所处的事务，
-			或者出现等待超时。
-````	
+或者出现等待超时。
+````
+
 --如何使用可视化工具操作数据库
 	
 --如何在编程语言中操作数据库
